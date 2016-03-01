@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 public class IntentUtils {
 
     private static IntentUtils mIntentUtils;
+    @SuppressWarnings("FieldCanBeLocal")
     private Context mAppContext;
     private PackageManager mPackageManager;
 
@@ -34,7 +35,6 @@ public class IntentUtils {
     /** Return true if an app can handle this intent, otherwise false. */
     public boolean isMatchingActivity(@NonNull Intent intent) {
         return !mPackageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).isEmpty();
-
     }
 
 }

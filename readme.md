@@ -21,7 +21,6 @@ Notes for why this app is useful:
 
 
 ## TODO
-
 - In package detail page:
   - Show all package watching intents
   - Show all permissions asked for
@@ -47,6 +46,11 @@ Notes for why this app is useful:
 - Scan popular apps in store.
 - Read shared preferences and database files of other devices to see if they are storing a particular app. But, can can be countered by simple obfuscation.
 - Send fake broadcast and can see if they are received? Maybe Android system doesn't have that capability
+
+## "Simple" TODOs up for grabs to get pull-request experience (only one per person)
+- Update AppModelDetailPage's Dialog to something that'll stay shown on rotation (perhaps Fragment or FragmentDialog)
+- Add parent Activity support for API 15 for AppModelDetailPage (just need to edit AndroidManifest.xml)
+- In AppModelDetailPage, *emphasize* the "internet" and "running" TextViews when they are true
 
 
 

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
+ * The page displaying list of apps that could potentially identify developer devices.
  */
 public class MainFragment extends Fragment {
 
