@@ -3,11 +3,9 @@ package com.danialgoodwin.antiidentifydevdevice;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,7 +27,7 @@ public class MainFragment extends Fragment {
     private Context mContext;
     private PackageUtils mPackageUtils;
     private ScanAppsTask mLoadAppListTask;
-    private List<AppModel> mAppModels = new ArrayList<>();
+    private List<AppModel> mInfectedApps = new ArrayList<>();
 
     private ProgressBar mProgressBar;
     private TextView mProgressTextView;
@@ -50,23 +48,22 @@ public class MainFragment extends Fragment {
         mLoadAppListTask = new ScanAppsTask(mPackageUtils, new ScanAppsTask.OnProgressListener() {
             @Override
             public void onProgress(int progress, int max, @Nullable AppModel app) {
-                Log.d("MainFragment", "onProgress() called with: " + "progress = [" + progress + "], max = [" + max + "], app = [" + app + "]");
                 if (progress == 0) {
                     mProgressBar.setMax(max);
-                    mAppModels.clear();
+                    mInfectedApps.clear();
                     mAdapter.notifyDataSetChanged();
                     mProgressTextView.setKeepScreenOn(true);
                 } else if (progress < max) {
-                    mProgressTextView.setText(progress + "/" + max);
+                    mProgressTextView.setText("Scanning: " + progress + "/" + max);
                 } else {
                     mProgressBar.setVisibility(View.GONE);
                     mProgressTextView.setKeepScreenOn(false);
-                    mProgressTextView.setText("Found " + mAppModels .size() + ":");
+                    mProgressTextView.setText("Found " + mInfectedApps.size() + ":");
                 }
                 if (app != null) {
                     Log.d("MainFragment", "app.getPackageName()=" + app.getPackageName());
-                    mAppModels.add(app);
-                    mAdapter.notifyItemInserted(mAppModels.size() - 1);
+                    mInfectedApps.add(app);
+                    mAdapter.notifyItemInserted(mInfectedApps.size() - 1);
                 }
                 mProgressBar.setProgress(progress);
             }
@@ -75,7 +72,7 @@ public class MainFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         mProgressTextView = (TextView) rootView.findViewById(R.id.progress_text);
@@ -86,12 +83,21 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAdapter = new AppItemViewAdapter(mAppModels);
+        mAdapter = new AppItemViewAdapter(mInfectedApps);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
 
-        if (mLoadAppListTask.getStatus() == AsyncTask.Status.PENDING) {
-            mLoadAppListTask.execute();
+        switch (mLoadAppListTask.getStatus()) {
+            case PENDING:
+//                mProgressTextView.setText("Loading...");
+                mLoadAppListTask.execute();
+                break;
+            case RUNNING:
+                break;
+            case FINISHED:
+                mProgressBar.setVisibility(View.GONE);
+                mProgressTextView.setText("Found " + mInfectedApps.size() + ":");
+                break;
         }
     }
 
