@@ -11,10 +11,13 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".AppModelDetailPage"
+            android:parentActivityName=".MainActivity" />
 
         <receiver
             android:name=".MainReceiver"
@@ -22,13 +25,10 @@
             android:exported="true">
             <intent-filter android:priority="999">
                 <action android:name="android.intent.action.PACKAGE_ADDED"/>
-
                 <data android:scheme="package"/>
             </intent-filter>
         </receiver>
 
-        <activity android:name=".AppModelDetailPage">
-        </activity>
     </application>
 
 </manifest>

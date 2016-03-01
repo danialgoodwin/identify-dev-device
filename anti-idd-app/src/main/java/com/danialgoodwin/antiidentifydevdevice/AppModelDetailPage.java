@@ -12,7 +12,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,13 +21,9 @@ import com.danialgoodwin.android.SimpleStorage;
 import com.danialgoodwin.android.util.IntentUtils;
 import com.danialgoodwin.android.util.PackageUtils;
 import com.jaredrummler.apkparser.ApkParser;
-import com.jaredrummler.apkparser.model.AndroidComponent;
-import com.jaredrummler.apkparser.model.IntentFilter;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.List;
 
 public class AppModelDetailPage extends AppCompatActivity {
 
@@ -42,6 +37,7 @@ public class AppModelDetailPage extends AppCompatActivity {
         return intent;
     }
 
+    @SuppressWarnings("unused")
     public static void showFullPage(@NonNull Context context, @NonNull AppModel app) {
         Intent intent = new Intent(context, AppModelDetailPage.class);
         intent.putExtra(INTENT_EXTRA_PACKAGE_NAME, app.getPackageName());
@@ -60,7 +56,6 @@ public class AppModelDetailPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String packageName = getIntent().getStringExtra(INTENT_EXTRA_PACKAGE_NAME);
-        SimpleMessage.showOneToast(this, "packageName=" + packageName);
         ApplicationInfo appInfo = null;
         try {
             appInfo = getPackageManager().getApplicationInfo(packageName, 0);
