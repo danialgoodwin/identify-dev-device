@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import com.danialgoodwin.android.util.PackageUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ScanAppsTask extends AsyncTask<Void, AppModel, List<AppModel>> {
@@ -25,9 +27,16 @@ public class ScanAppsTask extends AsyncTask<Void, AppModel, List<AppModel>> {
     @Override
     protected List<AppModel> doInBackground(Void... params) {
         List<ApplicationInfo> packages = mPackageUtils.getAllPackages();
-        List<AppModel> models = new ArrayList<>();
         final int countPackages = packages.size();
 
+        Collections.sort(packages, new Comparator<ApplicationInfo>() {
+            @Override
+            public int compare(ApplicationInfo lhs, ApplicationInfo rhs) {
+                return lhs.packageName.compareTo(rhs.packageName);
+            }
+        });
+
+        List<AppModel> models = new ArrayList<>();
         for (int i = 0; i < countPackages; i++) {
             ApplicationInfo info = packages.get(i);
             AppModel model = null;
@@ -39,6 +48,11 @@ public class ScanAppsTask extends AsyncTask<Void, AppModel, List<AppModel>> {
             mListener.onProgress(i + 1, countPackages, model);
         }
         return models;
+    }
+
+    @Override
+    protected void onProgressUpdate(AppModel... values) {
+
     }
 
     public interface OnProgressListener {

@@ -66,7 +66,6 @@ public class MainFragment extends Fragment {
                 if (app != null) {
                     Log.d("MainFragment", "app.getPackageName()=" + app.getPackageName());
                     mAppModels.add(app);
-//                    mAdapter.notifyDataSetChanged();
                     mAdapter.notifyItemInserted(mAppModels.size() - 1);
                 }
                 mProgressBar.setProgress(progress);
@@ -87,22 +86,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
-
-
-//        List<ApplicationInfo> packages = mPackageUtils.getAllPackages();
-//        List<AppModel> models = new ArrayList<>();
-//        final int countPackages = packages.size();
-//        for (int i = 0; i < countPackages; i++) {
-//            ApplicationInfo info = packages.get(i);
-//            models.add(new AppModel(info));
-//        }
-//        mAppModels = models;
-
-
-
-
         mAdapter = new AppItemViewAdapter(mAppModels);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
