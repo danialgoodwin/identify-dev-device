@@ -12,14 +12,20 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.danialgoodwin.android.SimpleMessage;
+import com.danialgoodwin.android.SimpleStorage;
 import com.danialgoodwin.android.ViewFactory;
 import com.danialgoodwin.android.util.PackageUtils;
+import com.jaredrummler.apkparser.ApkParser;
+
+import java.io.File;
+import java.io.IOException;
 
 public class AppModelDetailPage extends AppCompatActivity {
 
@@ -61,12 +67,13 @@ public class AppModelDetailPage extends AppCompatActivity {
         }
     }
 
-    private static View getView(@NonNull final Context context, @NonNull AppModel app) {
+    private static View getView(@NonNull final Context context, @NonNull final AppModel app) {
         View rootView = View.inflate(context, R.layout.activity_app_model_detail_page, null);
         TextView packageNameView = (TextView) rootView.findViewById(R.id.package_name_view);
         TextView apkPathView = (TextView) rootView.findViewById(R.id.apk_path_view);
         TextView isInternetView = (TextView) rootView.findViewById(R.id.is_internet_view);
         TextView isRunningView = (TextView) rootView.findViewById(R.id.is_running_view);
+        Button showAppManifestButton = (Button) rootView.findViewById(R.id.show_app_manifest_button);
         Button showSystemAppPageButton = (Button) rootView.findViewById(R.id.show_system_app_page_button);
 
         final String packageName = app.getApplicationInfo().packageName;
@@ -75,6 +82,37 @@ public class AppModelDetailPage extends AppCompatActivity {
         apkPathView.setText(app.getApkPath());
         isInternetView.setText("internet: " + app.isInternetPermissionRequested());
         isRunningView.setText("running: " + !app.isAppStopped());
+
+        showAppManifestButton.setText("App Manifest");
+        showAppManifestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ApkParser apkParser = ApkParser.create(app.getApkPath());
+                try {
+                    String manifestXml = apkParser.getManifestXml();
+                    Log.d("AppModelDetailPage", "manifestXml=" + manifestXml);
+
+                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_VIEW);
+//                    sharingIntent.setType("application/xml"); // Error: "No apps can perform this action" and the UI looked bad
+//                    sharingIntent.setType("text/xml"); // Error: Not being displayed in the other apps
+                    File manifestFile = SimpleStorage.newCacheFilePublicReadable(context, "manifest.txt", manifestXml);
+                    if (manifestFile == null) {
+                        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "AndroidManifest.xml");
+                        sharingIntent.putExtra(Intent.EXTRA_TITLE, "AndroidManifest.xml");
+                        sharingIntent.putExtra(Intent.EXTRA_TEXT, manifestXml);
+                        sharingIntent.setType("text/plain");
+                    } else {
+                        sharingIntent.setDataAndType(Uri.fromFile(manifestFile), "text/plain");
+                    }
+//                    context.startActivity(sharingIntent);
+                    context.startActivity(Intent.createChooser(sharingIntent, "View using..."));
+//                    context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.share_using)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    SimpleMessage.showToast(context, "Error showing manifest");
+                }
+            }
+        });
 
         showSystemAppPageButton.setText("System app info");
         showSystemAppPageButton.setOnClickListener(new View.OnClickListener() {

@@ -19,7 +19,7 @@ import android.widget.Toast;
 /** Helper methods to show simple messages to users. */
 public class SimpleMessage {
 
-    public static final int MAIN_NOTIFICATION_ID = 0;
+    private static final int MAIN_NOTIFICATION_ID = 0;
 
     private static Toast mOneToast;
     private static Handler mMainThreadHandler;
@@ -40,6 +40,7 @@ public class SimpleMessage {
         mOneToast.show();
     }
 
+    /** Show a message in the notification bar */
     public static void showNotification(@NonNull Context context, @NonNull CharSequence title,
             @NonNull CharSequence message, @DrawableRes int icon, @Nullable PendingIntent intent) {
         Notification notification = new NotificationCompat.Builder(context)
@@ -53,6 +54,7 @@ public class SimpleMessage {
         manager.notify(MAIN_NOTIFICATION_ID, notification);
     }
 
+    /** Show an interrupting prompt message. */
     public static void showPrompt(@NonNull Context context, @NonNull CharSequence title, @NonNull CharSequence message) {
         new AlertDialog.Builder(context)
                 .setTitle(title)

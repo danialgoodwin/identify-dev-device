@@ -47,7 +47,7 @@ public class PackageUtils {
         return mPackageManager.getInstalledApplications(0);
     }
 
-    public boolean isContainPackageMonitoringReceiver(String packageName) {
+    public boolean isContainPackageMonitoringReceiver(@NonNull String packageName) {
         if (packageName == null || packageName.isEmpty()) { return false; }
         try {
             ApkParser parser = ApkParser.create(mPackageManager, packageName);
@@ -96,9 +96,11 @@ public class PackageUtils {
         return false;
     }
 
-    public boolean isAppStopped(String packageName) {
+    /** Return true if the app is stopped, otherwise. */
+    public boolean isAppStopped(@NonNull String packageName) {
         try {
             PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, 0);
+            //noinspection UnnecessaryLocalVariable
             boolean isStopped = (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_STOPPED) != 0;
             return isStopped;
         } catch (PackageManager.NameNotFoundException e) {
