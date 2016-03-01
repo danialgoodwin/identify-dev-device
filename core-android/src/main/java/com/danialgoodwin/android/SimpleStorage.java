@@ -18,8 +18,8 @@ public class SimpleStorage {
     /**
      * NOTE: This will overwrite any file with the same name
      * @param context
-     * @param filename
-     * @param text
+     * @param filename name of the file
+     * @param text data to save in the file
      * @return file is successful, otherwise null
      */
     @SuppressLint({"SetWorldReadable"})
@@ -46,6 +46,5 @@ public class SimpleStorage {
         }
         return null;
     }
-
 
 }

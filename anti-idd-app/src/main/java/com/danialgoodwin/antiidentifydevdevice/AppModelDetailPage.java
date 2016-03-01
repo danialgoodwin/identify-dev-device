@@ -12,15 +12,13 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.danialgoodwin.android.SimpleMessage;
 import com.danialgoodwin.android.SimpleStorage;
-import com.danialgoodwin.android.ViewFactory;
+import com.danialgoodwin.android.util.IntentUtils;
 import com.danialgoodwin.android.util.PackageUtils;
 import com.jaredrummler.apkparser.ApkParser;
 
@@ -90,8 +88,6 @@ public class AppModelDetailPage extends AppCompatActivity {
                 ApkParser apkParser = ApkParser.create(app.getApkPath());
                 try {
                     String manifestXml = apkParser.getManifestXml();
-                    Log.d("AppModelDetailPage", "manifestXml=" + manifestXml);
-
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_VIEW);
 //                    sharingIntent.setType("application/xml"); // Error: "No apps can perform this action" and the UI looked bad
 //                    sharingIntent.setType("text/xml"); // Error: Not being displayed in the other apps
@@ -104,12 +100,23 @@ public class AppModelDetailPage extends AppCompatActivity {
                     } else {
                         sharingIntent.setDataAndType(Uri.fromFile(manifestFile), "text/plain");
                     }
+
+                    if (IntentUtils.getInstance(context).isMatchingActivity(sharingIntent)) {
 //                    context.startActivity(sharingIntent);
-                    context.startActivity(Intent.createChooser(sharingIntent, "View using..."));
+                        context.startActivity(Intent.createChooser(sharingIntent, "View using..."));
 //                    context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.share_using)));
+                    } else {
+                        // TODO: Create way to show the manifest
+                        SimpleMessage.showToast(context, "Error: No apps to view manifest");
+
+                        // Just a temp solution
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        shareIntent.setDataAndType(Uri.fromFile(manifestFile), "text/plain");
+                        context.startActivity(shareIntent);
+                    }
                 } catch (IOException e) {
-                    e.printStackTrace();
                     SimpleMessage.showToast(context, "Error showing manifest");
+                    e.printStackTrace();
                 }
             }
         });

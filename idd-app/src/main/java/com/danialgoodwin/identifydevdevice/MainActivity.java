@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final boolean CONFIG_IS_USE_IDENTIFY_SERVICE = true;
-    private static final boolean CONFIG_IS_USE_IDENTIFY_RECEIVER = false;
+    private static final boolean CONFIG_IS_USE_IDENTIFY_SERVICE = false;
+    private static final boolean CONFIG_IS_USE_IDENTIFY_RECEIVER = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

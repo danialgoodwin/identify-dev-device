@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +60,6 @@ public class MainFragment extends Fragment {
                     mProgressTextView.setText("Found " + mInfectedApps.size() + ":");
                 }
                 if (app != null) {
-                    Log.d("MainFragment", "app.getPackageName()=" + app.getPackageName());
                     mInfectedApps.add(app);
                     mAdapter.notifyItemInserted(mInfectedApps.size() - 1);
                 }
@@ -86,7 +84,6 @@ public class MainFragment extends Fragment {
         mAdapter = new AppItemViewAdapter(mInfectedApps, new AppItemViewAdapter.OnItemClickListener() {
             @Override
             public void onClick(AppModel app, View view, int position) {
-                Log.d("AppItemViewAdapter", "onClick()");
                 AppModelDetailPage.show(view.getContext(), app);
             }
         });
