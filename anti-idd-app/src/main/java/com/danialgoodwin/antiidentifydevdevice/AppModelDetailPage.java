@@ -12,6 +12,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,12 +22,18 @@ import com.danialgoodwin.android.SimpleStorage;
 import com.danialgoodwin.android.util.IntentUtils;
 import com.danialgoodwin.android.util.PackageUtils;
 import com.jaredrummler.apkparser.ApkParser;
+import com.jaredrummler.apkparser.model.AndroidComponent;
+import com.jaredrummler.apkparser.model.IntentFilter;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
 
 public class AppModelDetailPage extends AppCompatActivity {
 
+    // Note: Using "application/xml", system showed "No apps can perform this action" and the UI looked bad
+    private static final String MIME_TYPE_MANIFEST = "text/plain"; // Shows more possible apps to handle viewing compared to "text/xml" and "application/xml"
     private static final String INTENT_EXTRA_PACKAGE_NAME = "package_name";
 
     public static Intent getIntentToShow(@NonNull Context context, @NonNull String packageName) {
@@ -35,7 +42,7 @@ public class AppModelDetailPage extends AppCompatActivity {
         return intent;
     }
 
-    public static void showPage(@NonNull Context context, @NonNull AppModel app) {
+    public static void showFullPage(@NonNull Context context, @NonNull AppModel app) {
         Intent intent = new Intent(context, AppModelDetailPage.class);
         intent.putExtra(INTENT_EXTRA_PACKAGE_NAME, app.getPackageName());
         context.startActivity(intent);
@@ -71,6 +78,7 @@ public class AppModelDetailPage extends AppCompatActivity {
         TextView apkPathView = (TextView) rootView.findViewById(R.id.apk_path_view);
         TextView isInternetView = (TextView) rootView.findViewById(R.id.is_internet_view);
         TextView isRunningView = (TextView) rootView.findViewById(R.id.is_running_view);
+//        final TextView receiverIntentActionsView = (TextView) rootView.findViewById(R.id.receiver_intent_actions_view);
         Button showAppManifestButton = (Button) rootView.findViewById(R.id.show_app_manifest_button);
         Button showSystemAppPageButton = (Button) rootView.findViewById(R.id.show_system_app_page_button);
 
@@ -89,29 +97,27 @@ public class AppModelDetailPage extends AppCompatActivity {
                 try {
                     String manifestXml = apkParser.getManifestXml();
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_VIEW);
-//                    sharingIntent.setType("application/xml"); // Error: "No apps can perform this action" and the UI looked bad
-//                    sharingIntent.setType("text/xml"); // Error: Not being displayed in the other apps
-                    File manifestFile = SimpleStorage.newCacheFilePublicReadable(context, "manifest.txt", manifestXml);
+                    File manifestFile = SimpleStorage.newCacheFilePublicReadable(context, "manifest.xml", manifestXml);
                     if (manifestFile == null) {
                         sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "AndroidManifest.xml");
                         sharingIntent.putExtra(Intent.EXTRA_TITLE, "AndroidManifest.xml");
                         sharingIntent.putExtra(Intent.EXTRA_TEXT, manifestXml);
-                        sharingIntent.setType("text/plain");
+                        sharingIntent.setType(MIME_TYPE_MANIFEST);
                     } else {
-                        sharingIntent.setDataAndType(Uri.fromFile(manifestFile), "text/plain");
+                        sharingIntent.setDataAndType(Uri.fromFile(manifestFile), MIME_TYPE_MANIFEST);
                     }
 
                     if (IntentUtils.getInstance(context).isMatchingActivity(sharingIntent)) {
+                        // TODOv2: Maybe create preference to allow user to set default app to use
 //                    context.startActivity(sharingIntent);
                         context.startActivity(Intent.createChooser(sharingIntent, "View using..."));
-//                    context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.share_using)));
                     } else {
-                        // TODO: Create way to show the manifest
+                        // TODOv2: Create native way to show the manifest. Meh, it really isn't needed
                         SimpleMessage.showToast(context, "Error: No apps to view manifest");
 
                         // Just a temp solution
                         Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                        shareIntent.setDataAndType(Uri.fromFile(manifestFile), "text/plain");
+                        shareIntent.setDataAndType(Uri.fromFile(manifestFile), MIME_TYPE_MANIFEST);
                         context.startActivity(shareIntent);
                     }
                 } catch (IOException e) {

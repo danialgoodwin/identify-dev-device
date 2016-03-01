@@ -48,6 +48,7 @@ public class PackageUtils {
     }
 
     public boolean isContainPackageMonitoringReceiver(@NonNull String packageName) {
+        //noinspection ConstantConditions
         if (packageName == null || packageName.isEmpty()) { return false; }
         try {
             ApkParser parser = ApkParser.create(mPackageManager, packageName);
