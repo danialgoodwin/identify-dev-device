@@ -6,11 +6,13 @@ package com.danialgoodwin.android;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
@@ -39,12 +41,13 @@ public class SimpleMessage {
     }
 
     public static void showNotification(@NonNull Context context, @NonNull CharSequence title,
-                @NonNull CharSequence message, @DrawableRes int icon) {
+            @NonNull CharSequence message, @DrawableRes int icon, @Nullable PendingIntent intent) {
         Notification notification = new NotificationCompat.Builder(context)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setSmallIcon(icon)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .setContentIntent(intent)
                 .build();
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(MAIN_NOTIFICATION_ID, notification);

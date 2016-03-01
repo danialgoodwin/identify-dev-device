@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.danialgoodwin.android.SimpleMessage;
 import com.danialgoodwin.android.ViewFactory;
@@ -20,6 +21,12 @@ import com.danialgoodwin.android.ViewFactory;
 public class AppModelDetailPage extends AppCompatActivity {
 
     private static final String INTENT_EXTRA_PACKAGE_NAME = "package_name";
+
+    public static Intent getIntentToShow(@NonNull Context context, @NonNull String packageName) {
+        Intent intent = new Intent(context, AppModelDetailPage.class);
+        intent.putExtra(INTENT_EXTRA_PACKAGE_NAME, packageName);
+        return intent;
+    }
 
     public static void showPage(@NonNull Context context, @NonNull AppModel app) {
         Intent intent = new Intent(context, AppModelDetailPage.class);
@@ -30,7 +37,7 @@ public class AppModelDetailPage extends AppCompatActivity {
     public static void show(@NonNull Context context, @NonNull AppModel app) {
         new AlertDialog.Builder(context)
                 .setTitle(app.getTitle())
-                .setMessage(app.getApplicationInfo().toString())
+                .setMessage(String.format("%s%n%s", app.getPackageName(), app.getApkPath()))
                 .setView(getView(context, app))
                 .show();
     }
@@ -60,7 +67,9 @@ public class AppModelDetailPage extends AppCompatActivity {
                 showSystemAppInfoPage(context, packageName);
             }
         });
-        LinearLayout rootView = v.col(button);
+        TextView isInternetView = v.text("internet: " + app.isInternetPermissionRequested());
+        TextView isRunningView = v.text("running: " + !app.isAppStopped());
+        LinearLayout rootView = v.col(isInternetView, isRunningView, button);
         return rootView;
     }
 
