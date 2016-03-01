@@ -1,63 +1,45 @@
-# Find Dev Devices
+# Programmatically Identify Developer Devices
 
-It would be possible to programmatically find the likely device(s) of the different app developers..
+Apps can programmatically identify likely device(s) of the different app developers.
 
-It's due to the fact that app developers usually install their app many times. And, it's possible to watch for those changes in Android.
+It's due to the fact that app developers usually install their app many times. And, it's possible to watch for those app installs in Android.
 
-Note: The scan can take awhile if there are many apps on the device.
+Also, implementing an app that takes advantage of this requires zero permissions.
 
+So, this repo has two apps: One to programmatically identify dev devices, and one to identify those kind of apps.
 
+Imagine, if you are an app developer, then your device(s) can be identified and have special code ran for them and nobody else will experience the same issue or app changes.
 
-Notes for why this app is useful:
+Notes for why this app is might be useful (but still shouldn't be used):
+
+- Learn something new: More approaches to breaching privacy
+- Show resume to app developer(s) at a specific company
+- Run different app code for other developers, or for non-developers
 - Possible security vulnerability by targeting devices, through apps
-- Paranoid
-- Learn something new
 
-- Easier to target apps with few number of devs. Possible privacy issue. For apps with many devs, it could still be targeting, but not as specific as an individual level.
-
-- But, currently this app has limitations. If the code is embedded in another app's Service, then nothing related to seeing the intent has to be added to the Manifest.
-  - Though, typically when I'm working on an app, I don't have any other apps running so that wouldn't be a problem. (Caveat: launcher and Google/Android systems)
+- Easier to target companies/apps with few number of devs. Possible privacy issue. For apps with many devs, it could still be targeting, but not as specific as an individual level (unless app has GET_ACCOUNTS permission).
 
 
 
-## TODO
-- In package detail page:
-  - Show all package watching intents
-  - Show all permissions asked for
-  - Button to display full manifest? Could do it by sending as Intent to another app to handle.
-- Settings page for what "Scan all apps":
-   - Adjust what intent actions are looked for
-   - Option to hide system apps? (Not a priority feature)
+## Identify Dev Device app
 
-- Possibly create library for 'ListLayout' that takes a List<T> and onClickListener. Should be simple to use and easy to memorize.
-
-- Since developers would be interested in this, have donate options for 1.618, 2.718, 3.14, 6.22, 9.088.
-  - Create library to do this easily
-
-- Something to maybe integrate: https://github.com/jaredrummler/AndroidProcesses
+More info in another readme in the identify-app module's directory.
 
 
 
-## TODO v2
-- Possibly add more limitations on which packages are shown:
-  - Check for data tag's host and package. [More info](http://developer.android.com/guide/topics/manifest/data-element.html)
-- In-app package detail page:
-  - Use https://github.com/jaredrummler/APKParser to show if app is signed or not
+## AIDD: Anti Identify Dev Device app
+
+This app identifies apps that have the capability to track app installs, thus dev devices.
+
+This is achieved by reading the AndroidManifest file for the apps and looking for a BroadcastReceiver that has the Intent action for watching package changes (add/replace/remove).
+
+More info in another readme for this module.
+
+
+
+## TODOs for further research
+
 - Scan popular apps in store.
-- Read shared preferences and database files of other devices to see if they are storing a particular app. But, can can be countered by simple obfuscation.
-- Send fake broadcast and can see if they are received? Maybe Android system doesn't have that capability
-
-## "Simple" TODOs up for grabs to get pull-request experience (only one per person)
-- Update AppModelDetailPage's Dialog to something that'll stay shown on rotation (perhaps Fragment or FragmentDialog)
-- Add parent Activity support for API 15 for AppModelDetailPage (just need to edit AndroidManifest.xml)
-- In AppModelDetailPage, *emphasize* the "internet" and "running" TextViews when they are true
-
-
-
-
-## Third party libraries
-
-- [APKParser](https://github.com/jaredrummler/APKParser): It has minSdkVersion 14, and targets 23
 
 
 
@@ -96,3 +78,12 @@ I would like to see the permission required in Manifest so that it is more robus
 I hope no apps are actively trying to identify developer devices, and now we have an app that can check.
 
 A "prefix" permission? For Google they may only want to packages that start with 'com.google' maybe.
+
+
+
+
+
+
+
+Currently this app has limitations. If the code is embedded in another app's Service, then nothing related to seeing the intent has to be added to the Manifest.
+  - Though, typically when I'm working on an app, I don't have any other apps running so that wouldn't be a problem. (Caveat: launcher and Google/Android systems)
