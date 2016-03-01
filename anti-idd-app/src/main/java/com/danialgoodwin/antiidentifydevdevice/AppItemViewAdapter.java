@@ -1,7 +1,6 @@
 package com.danialgoodwin.antiidentifydevdevice;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,11 @@ import java.util.List;
 public class AppItemViewAdapter extends RecyclerView.Adapter<AppItemViewAdapter.ViewHolder> {
 
     private List<AppModel> mAppModels;
+    private OnItemClickListener mOnClickListener;
 
-    public AppItemViewAdapter(List<AppModel> items) {
+    public AppItemViewAdapter(List<AppModel> items, OnItemClickListener listener) {
         mAppModels = items;
+        mOnClickListener = listener;
     }
 
     @Override
@@ -26,16 +27,19 @@ public class AppItemViewAdapter extends RecyclerView.Adapter<AppItemViewAdapter.
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        AppModel app = mAppModels.get(position);
-//        holder.mImageView = ; // TODO
-        holder.mTitleView.setText(app.getPackageName()); // TODO add user-facing name in parenthesis here
-        holder.mDescriptionView.setText(app.getPackageName()); // TODO add notable flags here
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        final AppModel app = mAppModels.get(position);
+        holder.mImageView.setImageDrawable(app.getIcon());
+        holder.mTitleView.setText(app.getPackageName() + " (" + app.getTitle() + ")");
+        holder.mDescriptionView.setText(
+                (app.isInternetPermissionRequested() ? "    internet" : "") +
+                (app.isAppStopped() ? "" : "    not stopped")
+        );
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("AppItemViewAdapter", "onBindViewHolder()");
+                mOnClickListener.onClick(app, v, holder.getAdapterPosition()); // Probably don't need the third argument
             }
         });
     }
@@ -50,7 +54,6 @@ public class AppItemViewAdapter extends RecyclerView.Adapter<AppItemViewAdapter.
         public final ImageView mImageView;
         public final TextView mTitleView;
         public final TextView mDescriptionView;
-        public AppModel mItem;
         public ViewHolder(View view) {
             super(view);
             mView = view;
@@ -63,6 +66,10 @@ public class AppItemViewAdapter extends RecyclerView.Adapter<AppItemViewAdapter.
         public String toString() {
             return super.toString() + " '" + mTitleView.getText() + "'";
         }
+    }
+
+    public interface OnItemClickListener {
+        void onClick(AppModel app, View view, int position);
     }
 
 }

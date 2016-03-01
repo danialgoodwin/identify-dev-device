@@ -33,12 +33,8 @@ public class SimpleMessage {
     /** Show a quick passive message to the user. This will first stop previous messages shown
      * from this same method. */
     public static void showOneToast(@NonNull Context context, @NonNull CharSequence message) {
-        if (mOneToast != null) {
-            mOneToast.cancel();
-            mOneToast.setText(message);
-        } else {
-            mOneToast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-        }
+        if (mOneToast != null) { mOneToast.cancel(); }
+        mOneToast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
         mOneToast.show();
     }
 

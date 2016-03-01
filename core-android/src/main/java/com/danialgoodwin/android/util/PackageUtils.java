@@ -120,4 +120,8 @@ public class PackageUtils {
     }
 
 
+    public PackageManager getPackageManager() {
+        return mPackageManager;
+    }
+
 }

@@ -21,7 +21,6 @@ public class ScanAppsTask extends AsyncTask<Void, ScanAppsTask.AppModelProgress,
     public ScanAppsTask(@NonNull PackageUtils packageUtils, @NonNull OnProgressListener listener) {
         mPackageUtils = packageUtils;
         mListener = listener;
-        // TODO: Possibly create a AppModelFactory class so that we can set default icon drawable.
     }
 
     @Override
@@ -43,7 +42,7 @@ public class ScanAppsTask extends AsyncTask<Void, ScanAppsTask.AppModelProgress,
             ApplicationInfo info = packages.get(i);
             AppModel model = null;
             if (mPackageUtils.isContainPackageMonitoringReceiver(info.packageName)) {
-                model = new AppModel(info);
+                model = new AppModel(info, mPackageUtils);
                 infectedApps.add(model);
             }
             publishProgress(new AppModelProgress(model, i + 1));

@@ -83,7 +83,13 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAdapter = new AppItemViewAdapter(mInfectedApps);
+        mAdapter = new AppItemViewAdapter(mInfectedApps, new AppItemViewAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(AppModel app, View view, int position) {
+                Log.d("AppItemViewAdapter", "onClick()");
+                AppModelDetailPage.show(view.getContext(), app);
+            }
+        });
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
 
