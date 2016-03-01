@@ -34,6 +34,7 @@ public class PackageUtils {
      * @param context the application context will be used
      * @return an instance of this class
      */
+    @NonNull
     public static PackageUtils getInstance(@NonNull Context context) {
         if (mPackageUtils == null) {
             mPackageUtils = new PackageUtils(context.getApplicationContext());
@@ -119,9 +120,32 @@ public class PackageUtils {
                 PackageManager.DONT_KILL_APP);
     }
 
-
+    @NonNull
     public PackageManager getPackageManager() {
         return mPackageManager;
     }
+
+    //    public int[] getPackageUid(String packageName) {
+//        try {
+//            mPackageManager.getPackageUid(packageName); // API is hidden
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+
+    // Android doesn't provide native support for IntentFilters yet
+//    public boolean isContainPackageAddedReceiver(String packageName) {
+//        if (packageName == null || packageName.isEmpty()) { return false; }
+//        try {
+//            PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_RECEIVERS | PackageManager.GET_INTENT_FILTERS);
+//            ActivityInfo[] receivers = packageInfo.receivers;
+//            for (ActivityInfo receiver : receivers) {
+//                receiver.
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

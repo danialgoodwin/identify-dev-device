@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 
 import com.danialgoodwin.android.SimpleMessage;
 import com.danialgoodwin.android.ViewFactory;
+import com.danialgoodwin.android.util.PackageUtils;
 
 public class AppModelDetailPage extends AppCompatActivity {
 
@@ -37,7 +40,7 @@ public class AppModelDetailPage extends AppCompatActivity {
     public static void show(@NonNull Context context, @NonNull AppModel app) {
         new AlertDialog.Builder(context)
                 .setTitle(app.getTitle())
-                .setMessage(String.format("%s%n%s", app.getPackageName(), app.getApkPath()))
+//                .setMessage(String.format("%s%n%s", app.getPackageName(), app.getApkPath()))
                 .setView(getView(context, app))
                 .show();
     }
@@ -45,31 +48,42 @@ public class AppModelDetailPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // TODO: Open fragment
-        // TODO: Dialog theme
-
         String packageName = getIntent().getStringExtra(INTENT_EXTRA_PACKAGE_NAME);
         SimpleMessage.showOneToast(this, "packageName=" + packageName);
-//        setContentView(R.layout.activity_app_model_detail_page);
-        finish();
+        ApplicationInfo appInfo = null;
+        try {
+            appInfo = getPackageManager().getApplicationInfo(packageName, 0);
+            setContentView(getView(this, new AppModel(appInfo, PackageUtils.getInstance(this))));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            SimpleMessage.showToast(this, "Error: Package not found");
+            finish();
+        }
     }
 
-
-
     private static View getView(@NonNull final Context context, @NonNull AppModel app) {
+        View rootView = View.inflate(context, R.layout.activity_app_model_detail_page, null);
+        TextView packageNameView = (TextView) rootView.findViewById(R.id.package_name_view);
+        TextView apkPathView = (TextView) rootView.findViewById(R.id.apk_path_view);
+        TextView isInternetView = (TextView) rootView.findViewById(R.id.is_internet_view);
+        TextView isRunningView = (TextView) rootView.findViewById(R.id.is_running_view);
+        Button showSystemAppPageButton = (Button) rootView.findViewById(R.id.show_system_app_page_button);
+
         final String packageName = app.getApplicationInfo().packageName;
 
-        ViewFactory v = new ViewFactory(context);
-        Button button = v.button("AppInfo", new View.OnClickListener() {
+        packageNameView.setText(packageName);
+        apkPathView.setText(app.getApkPath());
+        isInternetView.setText("internet: " + app.isInternetPermissionRequested());
+        isRunningView.setText("running: " + !app.isAppStopped());
+
+        showSystemAppPageButton.setText("System app info");
+        showSystemAppPageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showSystemAppInfoPage(context, packageName);
             }
         });
-        TextView isInternetView = v.text("internet: " + app.isInternetPermissionRequested());
-        TextView isRunningView = v.text("running: " + !app.isAppStopped());
-        LinearLayout rootView = v.col(isInternetView, isRunningView, button);
+
         return rootView;
     }
 
