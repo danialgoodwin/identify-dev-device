@@ -2,8 +2,11 @@ package com.danialgoodwin.android.util;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+
+import java.util.List;
 
 /** Helper methods related to packages. */
 public class PackageUtils {
@@ -27,6 +30,11 @@ public class PackageUtils {
             mPackageUtils = new PackageUtils(context.getApplicationContext());
         }
         return mPackageUtils;
+    }
+
+    @NonNull
+    public List<ApplicationInfo> getAllPackages() {
+        return mPackageManager.getInstalledApplications(0);
     }
 
     /**
