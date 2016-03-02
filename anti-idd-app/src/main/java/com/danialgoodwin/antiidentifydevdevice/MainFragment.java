@@ -26,7 +26,8 @@ public class MainFragment extends Fragment {
 
     private Context mContext;
     private PackageUtils mPackageUtils;
-    private @Nullable ScanAppsTask mLoadAppListTask;
+    private AiddPrefs mAiddPrefs;
+    @Nullable private ScanAppsTask mLoadAppListTask;
     private List<AppModel> mInfectedApps = new ArrayList<>();
 
     private Button mScanAppsButton;
@@ -34,6 +35,34 @@ public class MainFragment extends Fragment {
     private TextView mProgressTextView;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
+
+    private ScanAppsTask.OnProgressListener mOnProgressListener = new ScanAppsTask.OnProgressListener() {
+        @Override
+        public void onProgress(int progress, int max, @Nullable AppModel app) {
+            if (progress == 0) {
+//                mScanAppsButton.setVisibility(View.VISIBLE); // Maybe not?
+                mProgressBar.setVisibility(View.VISIBLE);
+                mProgressBar.setMax(max);
+                mInfectedApps.clear();
+                mAdapter.notifyDataSetChanged();
+                mAiddPrefs.clearInfectedApps();
+                mProgressTextView.setKeepScreenOn(true);
+            } else if (progress < max) {
+                mProgressTextView.setText("Scanning: " + progress + "/" + max);
+            } else {
+//                mScanAppsButton.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.GONE);
+                mProgressTextView.setKeepScreenOn(false);
+                mProgressTextView.setText("Found " + mInfectedApps.size() + ":");
+            }
+            if (app != null) {
+                mInfectedApps.add(app);
+                mAiddPrefs.addInfectedApp(app.getPackageName());
+                mAdapter.notifyItemInserted(mInfectedApps.size() - 1);
+            }
+            mProgressBar.setProgress(progress);
+        }
+    };
 
     @Override
     public void onAttach(Context context) {
@@ -46,6 +75,7 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         mPackageUtils = PackageUtils.getInstance(mContext);
+        mAiddPrefs = AiddPrefs.getInstance(mContext);
     }
 
     @Override
@@ -74,38 +104,22 @@ public class MainFragment extends Fragment {
         mScanAppsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mLoadAppListTask == null) {
-                    mLoadAppListTask = new ScanAppsTask(mPackageUtils, new ScanAppsTask.OnProgressListener() {
-                        @Override
-                        public void onProgress(int progress, int max, @Nullable AppModel app) {
-                            if (progress == 0) {
-                                mProgressBar.setMax(max);
-                                mInfectedApps.clear();
-                                mAdapter.notifyDataSetChanged();
-                                mProgressTextView.setKeepScreenOn(true);
-                            } else if (progress < max) {
-                                mProgressTextView.setText("Scanning: " + progress + "/" + max);
-                            } else {
-                                mScanAppsButton.setVisibility(View.GONE);
-                                mProgressBar.setVisibility(View.GONE);
-                                mProgressTextView.setKeepScreenOn(false);
-                                mProgressTextView.setText("Found " + mInfectedApps.size() + ":");
-                            }
-                            if (app != null) {
-                                mInfectedApps.add(app);
-                                mAdapter.notifyItemInserted(mInfectedApps.size() - 1);
-                            }
-                            mProgressBar.setProgress(progress);
-                        }
-                    });
+//                if (mLoadAppListTask == null) {
+                    mLoadAppListTask = new ScanAppsTask(mPackageUtils, mOnProgressListener, true);
                     mLoadAppListTask.execute();
-                }
+//                }
             }
         });
 
         if (mLoadAppListTask == null) {
-
-        } else if (mLoadAppListTask != null) {
+            List<String> savedInfectedApps = mAiddPrefs.getInfectedApps();
+            if (!savedInfectedApps.isEmpty()) {
+                mLoadAppListTask = new ScanAppsTask(mPackageUtils, mOnProgressListener, false);
+                String[] infectedAppsArray = new String[savedInfectedApps.size()];
+                infectedAppsArray = savedInfectedApps.toArray(infectedAppsArray);
+                mLoadAppListTask.execute(infectedAppsArray);
+            }
+        } else {
             switch (mLoadAppListTask.getStatus()) {
                 case PENDING:
 //                mProgressTextView.setText("Loading...");

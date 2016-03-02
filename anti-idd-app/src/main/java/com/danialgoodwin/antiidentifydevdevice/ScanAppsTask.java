@@ -1,6 +1,7 @@
 package com.danialgoodwin.antiidentifydevdevice;
 
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,23 +13,34 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ScanAppsTask extends AsyncTask<Void, ScanAppsTask.AppModelProgress, List<AppModel>> {
+public class ScanAppsTask extends AsyncTask<String, ScanAppsTask.AppModelProgress, List<AppModel>> {
 
-    private PackageUtils mPackageUtils;
-    private OnProgressListener mListener;
+    private final PackageUtils mPackageUtils;
+    private final OnProgressListener mListener;
     private volatile int mCountTotalApps;
+    private final boolean mIsCheckForPackageMonitoringReceiver;
 
-    public ScanAppsTask(@NonNull PackageUtils packageUtils, @NonNull OnProgressListener listener) {
+    public ScanAppsTask(@NonNull PackageUtils packageUtils, @NonNull OnProgressListener listener, boolean isCheckForPackageMonitoringReceiver) {
         mPackageUtils = packageUtils;
         mListener = listener;
+        mIsCheckForPackageMonitoringReceiver = isCheckForPackageMonitoringReceiver;
     }
 
     @Override
-    protected List<AppModel> doInBackground(Void... params) {
-        List<ApplicationInfo> packages = mPackageUtils.getAllPackages();
+    protected List<AppModel> doInBackground(String... savedPackages) {
+        List<ApplicationInfo> packages;
+        if (savedPackages == null || savedPackages.length == 0) {
+            packages = mPackageUtils.getAllPackages();
+        } else {
+            packages = new ArrayList<>(savedPackages.length);
+            for (String savedPackage : savedPackages) {
+                try {
+                    packages.add(mPackageUtils.getPackageManager().getApplicationInfo(savedPackage, 0));
+                } catch (PackageManager.NameNotFoundException ignore) {}
+            }
+        }
         mCountTotalApps = packages.size();
         publishProgress(new AppModelProgress(null, 0)); // Update listener with max
-
         Collections.sort(packages, new Comparator<ApplicationInfo>() {
             @Override
             public int compare(ApplicationInfo lhs, ApplicationInfo rhs) {
@@ -41,7 +53,7 @@ public class ScanAppsTask extends AsyncTask<Void, ScanAppsTask.AppModelProgress,
             if (isCancelled()) { return infectedApps; }
             ApplicationInfo info = packages.get(i);
             AppModel model = null;
-            if (mPackageUtils.isContainPackageMonitoringReceiver(info.packageName)) {
+            if (!mIsCheckForPackageMonitoringReceiver || mPackageUtils.isContainPackageMonitoringReceiver(info.packageName)) {
                 model = new AppModel(info, mPackageUtils);
                 infectedApps.add(model);
             }

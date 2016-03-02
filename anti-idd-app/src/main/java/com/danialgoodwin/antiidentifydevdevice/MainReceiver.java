@@ -29,6 +29,7 @@ public class MainReceiver extends BroadcastReceiver {
         for (String packageName : packageNames) {
             boolean isContainPackageMonitoring = packageUtils.isContainPackageMonitoringReceiver(packageName);
             if (isContainPackageMonitoring) {
+                AiddPrefs.getInstance(context).addInfectedApp(packageName);
                 Intent activityIntent = AppModelDetailPage.getIntentToShow(context, packageName);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, activityIntent, 0);
                 SimpleMessage.showNotification(context, "WARNING", packageName, R.drawable.ic_stat_app, pendingIntent);
