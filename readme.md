@@ -20,6 +20,9 @@ Notes for why this app might be useful (but still shouldn't be used):
 - Easier to target companies/apps with few number of devs. Possible privacy issue. For apps with many devs, it could still be targeting, but not as specific as an individual level (unless app has GET_ACCOUNTS permission).
 
 
+(Learn more in my blog post: [Privacy: Programmatically Identifying Developer Devices](http://blog.anonsage.com/2016/03/privacy-programmatically-identifying-dev-device.html))
+
+
 
 ## Identify Dev Device app
 
@@ -33,14 +36,10 @@ This app identifies apps that have the capability to track app installs, thus de
 
 This is achieved by reading the AndroidManifest file for the apps and looking for a BroadcastReceiver that has the Intent action for watching package changes (add/replace/remove).
 
-More info in another readme for this module.
+More info in another readme in the anti-idd-app module's directory.
 
 
 
 ## TODOs for further research
 
 - Scan popular apps in store.
-
-
-
-(Learn more in my blog post: [Privacy: Programmatically Identifying Developer Devices](http://blog.anonsage.com/2016/03/privacy-programmatically-identifying-dev-device.html))

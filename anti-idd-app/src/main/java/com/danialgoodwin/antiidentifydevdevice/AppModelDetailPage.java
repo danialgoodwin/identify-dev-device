@@ -56,9 +56,8 @@ public class AppModelDetailPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String packageName = getIntent().getStringExtra(INTENT_EXTRA_PACKAGE_NAME);
-        ApplicationInfo appInfo = null;
         try {
-            appInfo = getPackageManager().getApplicationInfo(packageName, 0);
+            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(packageName, 0);
             setContentView(getView(this, new AppModel(appInfo, PackageUtils.getInstance(this))));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();

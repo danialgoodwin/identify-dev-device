@@ -1,18 +1,28 @@
-# Identify Developer Device
+# IDD: Identify Developer Device
 
-This repo provides a proof-of-concept way that developer devices can be identified from third-party apps.
+This module provides a proof-of-concept way that developer devices can be identified from third-party apps.
 
-The app works by listening for app installs in a `BroadcastReceiver`. The receiver can either be defined in the manifest or programmatically created and ran in a `Service`.
-
-Both have their pros and cons.
-
-The manifest method is reliable and doesn't require a running process, but it is easily detectable by reading the manifest.
-
-The service method would require decompiling the app (doable, but a bit harder than just the manifest) in order to be identifiable, but it requires a running process and developers may not be running any other apps when developing, so it wouldn't be as reliable.
+(Learn more in my blog post: [Privacy: Programmatically Identifying Developer Devices](http://blog.anonsage.com/2016/03/privacy-programmatically-identifying-dev-device.html))
 
 
-This APK will not be put in Google Play.
 
 Code has purposely been put into few classes for simplicity and I'm not planning on expanding it any further.
 
-(Learn more in my blog post: [Privacy: Programmatically Identifying Developer Devices](http://blog.anonsage.com/2016/03/privacy-programmatically-identifying-dev-device.html))
+
+
+
+## Code Design / Architecture
+
+The main entry points are `MainActivity` and `MainReceiver`.
+
+The receiver records all app installs and keeps track of install counts per day in `MainPrefs`. For simplicity, data is stored as a key-value pair with the key being package name appended with day, and the value being number of installs on that day. A limitation in the there is that it uses UTC time rather than device locale.
+
+Opening the app shows all the data that has been saved.
+
+The `MainService` dynamically creates a receiver. A limitation introduced is that it will stop itself if the task is swiped off the recent tasks list. And, it shows a foreground notification, even though that isn't strictly necessary for a `Service` to run in the background.
+
+
+
+## License
+
+It might eventually become a GNU GPL version with an added stipulation that the code isn't put in any device that the isn't the developer's actively used device in arm's reach. Using De Morgan's law, we could simply that sentence half to just being put on dev's active device in arm's reach.

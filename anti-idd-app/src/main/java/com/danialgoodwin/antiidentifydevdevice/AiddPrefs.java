@@ -17,6 +17,7 @@ public class AiddPrefs {
     private static final String PREFS_FILE_INFECTED_APPS = "infected_apps";
 
     private static AiddPrefs mAiddPrefs;
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private SharedPreferences mDefaultPrefs;
     private SharedPreferences mInfectedAppsPrefs;
 

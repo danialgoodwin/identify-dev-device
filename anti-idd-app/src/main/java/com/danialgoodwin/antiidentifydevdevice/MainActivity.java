@@ -1,16 +1,11 @@
 package com.danialgoodwin.antiidentifydevdevice;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.danialgoodwin.android.SimpleMessage;
 import com.danialgoodwin.android.util.IntentUtils;
 
 public class MainActivity extends AppCompatActivity {
