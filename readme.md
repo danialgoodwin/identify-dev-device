@@ -1,12 +1,12 @@
 # Programmatically Identify Developer Devices
 
-Apps can programmatically identify likely device(s) of the different app developers.
+Apps can programmatically identify likely device(s) of app developers.
 
 It's due to the fact that app developers usually install their app many times. And, it's possible to watch for those app installs in Android.
 
 Also, implementing an app that takes advantage of this requires zero permissions.
 
-So, this repo has two apps: One to programmatically identify dev devices, and one to identify those kind of apps.
+So, this repo has two apps: One to programmatically identify dev devices, and one to identify those kind of apps and stop them.
 
 Imagine, if you are an app developer, then your device(s) can be identified and have special code ran for them and nobody else will experience the same issue or app changes.
 
@@ -45,9 +45,9 @@ More info in another readme for this module.
 
 ## Blog post
 
-It would be possible to programmatically find the likely device(s) of the different app developers..
+Apps can programmatically identify likely device(s) of app developers.
 
-It's due to the fact that app developers usually install their app many times. And, it's possible to watch for those changes in Android.
+It's due to the fact that app developers usually install their app many times. And, it's possible to watch for those app installs in Android.
 
 
 I've created two working proof-of-concept apps: One to programmatically identify developer devices, and one to programmatically identify app that are capable of identifying developer devices.
