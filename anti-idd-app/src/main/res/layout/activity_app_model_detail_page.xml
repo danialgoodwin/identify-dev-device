@@ -12,6 +12,13 @@
     tools:context="com.danialgoodwin.antiidentifydevdevice.AppModelDetailPage">
 
     <TextView
+        style="?android:attr/textAppearanceLarge"
+        android:id="@+id/title_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
         android:id="@+id/package_name_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

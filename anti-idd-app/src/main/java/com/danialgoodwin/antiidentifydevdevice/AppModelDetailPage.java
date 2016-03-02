@@ -46,7 +46,7 @@ public class AppModelDetailPage extends AppCompatActivity {
 
     public static void show(@NonNull Context context, @NonNull AppModel app) {
         new AlertDialog.Builder(context)
-                .setTitle(app.getTitle())
+//                .setTitle(app.getTitle())
 //                .setMessage(String.format("%s%n%s", app.getPackageName(), app.getApkPath()))
                 .setView(getView(context, app))
                 .show();
@@ -69,6 +69,7 @@ public class AppModelDetailPage extends AppCompatActivity {
 
     private static View getView(@NonNull final Context context, @NonNull final AppModel app) {
         View rootView = View.inflate(context, R.layout.activity_app_model_detail_page, null);
+        TextView titleView = (TextView) rootView.findViewById(R.id.title_view);
         TextView packageNameView = (TextView) rootView.findViewById(R.id.package_name_view);
         TextView apkPathView = (TextView) rootView.findViewById(R.id.apk_path_view);
         TextView isInternetView = (TextView) rootView.findViewById(R.id.is_internet_view);
@@ -79,6 +80,7 @@ public class AppModelDetailPage extends AppCompatActivity {
 
         final String packageName = app.getApplicationInfo().packageName;
 
+        titleView.setText(app.getTitle());
         packageNameView.setText(packageName);
         apkPathView.setText(app.getApkPath());
         isInternetView.setText("internet: " + app.isInternetPermissionRequested());
