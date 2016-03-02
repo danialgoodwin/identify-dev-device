@@ -1,0 +1,6 @@
+AIDD_STORE_FILE=../my-keystore.jks
+AIDD_STORE_PASS=mystorepass
+AIDD_KEY_ALIAS=myalias
+AIDD_KEY_PASS=mypass
+AIDD_OUTPUT_DIR=
+

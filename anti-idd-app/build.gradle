@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+Properties localProperties = new Properties()
+localProperties.load(project.rootProject.file('local-prefs').newDataInputStream())
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -11,10 +14,20 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        release {
+            storeFile file(localProperties.getProperty('AIDD_STORE_FILE'))
+            storePassword localProperties.getProperty('AIDD_STORE_PASS')
+            keyAlias localProperties.getProperty('AIDD_KEY_ALIAS')
+            keyPassword localProperties.getProperty('AIDD_KEY_PASS')
+        }
+    }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
