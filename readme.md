@@ -10,7 +10,7 @@ So, this repo has two apps: One to programmatically identify dev devices, and on
 
 Imagine, if you are an app developer, then your device(s) can be identified and have special code ran for them and nobody else will experience the same issue or app changes.
 
-Notes for why this app is might be useful (but still shouldn't be used):
+Notes for why this app might be useful (but still shouldn't be used):
 
 - Learn something new: More approaches to breaching privacy
 - Show resume to app developer(s) at a specific company
