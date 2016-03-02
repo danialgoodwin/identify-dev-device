@@ -8,6 +8,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.DrawableRes;
@@ -47,6 +48,7 @@ public class SimpleMessage {
                 .setContentTitle(title)
                 .setContentText(message)
                 .setSmallIcon(icon)
+                .setColor(Color.RED)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setContentIntent(intent)
                 .build();

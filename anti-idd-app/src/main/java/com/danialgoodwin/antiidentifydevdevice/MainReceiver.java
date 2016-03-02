@@ -31,7 +31,7 @@ public class MainReceiver extends BroadcastReceiver {
             if (isContainPackageMonitoring) {
                 Intent activityIntent = AppModelDetailPage.getIntentToShow(context, packageName);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, activityIntent, 0);
-                SimpleMessage.showNotification(context, "WARNING", packageName, R.mipmap.ic_launcher, pendingIntent);
+                SimpleMessage.showNotification(context, "WARNING", packageName, R.drawable.ic_stat_app, pendingIntent);
             }
         }
     }
