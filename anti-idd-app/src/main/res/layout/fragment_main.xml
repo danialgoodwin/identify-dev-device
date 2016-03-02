@@ -8,6 +8,12 @@
     android:orientation="vertical"
     tools:context="com.danialgoodwin.antiidentifydevdevice.MainFragment" >
 
+    <Button
+        android:id="@+id/scan_apps_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/scan_all_apps" />
+
     <ProgressBar
         style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
         android:id="@+id/progress_bar"
