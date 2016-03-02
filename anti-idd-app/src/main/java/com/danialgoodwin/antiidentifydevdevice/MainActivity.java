@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.danialgoodwin.android.SimpleMessage;
+import com.danialgoodwin.android.util.IntentUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // No successful way to do this yet
-        menu.add(Menu.NONE, R.id.menu_action_learn_more, Menu.NONE, "Learn more");
+        menu.add(Menu.NONE, R.id.menu_action_learn_more, Menu.NONE, "See blog post");
 //        menu.add(Menu.NONE, R.id.menu_action_send_fake_broadcast, Menu.NONE, "Send fake broadcast");
 
         return super.onCreateOptionsMenu(menu);
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_action_learn_more:
-                showLearnMorePage(this);
+                IntentUtils.getInstance(this).viewUri("http://blog.anonsage.com/2016/03/privacy-programmatically-identifying-dev-device.html");
                 break;
             case R.id.menu_action_send_fake_broadcast:
 //                sendFakeBroadcast(this);
@@ -50,15 +51,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showLearnMorePage(@NonNull Context context) {
-        SimpleMessage.showPrompt(context, "AIDD", "Coming soon");
-    }
-
     // Note: This currently has error: `java.lang.SecurityException: Permission Denial: not allowed to send broadcast android.intent.action.PACKAGE_REPLACED`
     // because it's protected by the system. Source: http://developer.android.com/reference/android/content/Intent.html#ACTION_PACKAGE_ADDED
 //    private static void sendFakeBroadcast(@NonNull Context context) {
 //        Intent intent = new Intent(Intent.ACTION_PACKAGE_REPLACED);
-////        intent.setScheme(); // TODO: set scheme through setData(), if needed
+////        intent.setScheme(); // TODOv2: set scheme through setData(), if needed
 //        intent.putExtra(Intent.EXTRA_UID, context.getApplicationInfo().uid);
 //        context.sendBroadcast(intent);
 //    }

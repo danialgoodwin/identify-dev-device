@@ -3,13 +3,13 @@ package com.danialgoodwin.android.util;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
-/** Helper methods related to Intents */
-public class IntentUtils {
+/** Helper methods related to Intents. */
+public final class IntentUtils {
 
     private static IntentUtils mIntentUtils;
-    @SuppressWarnings("FieldCanBeLocal")
     private Context mAppContext;
     private PackageManager mPackageManager;
 
@@ -35,6 +35,16 @@ public class IntentUtils {
     /** Return true if an app can handle this intent, otherwise false. */
     public boolean isMatchingActivity(@NonNull Intent intent) {
         return !mPackageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).isEmpty();
+    }
+
+    public Intent getIntentToViewUri(@NonNull String uri) {
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+    }
+
+    public void viewUri(@NonNull String uri) {
+        Intent intent = getIntentToViewUri(uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mAppContext.startActivity(intent);
     }
 
 }
