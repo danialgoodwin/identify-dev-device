@@ -13,6 +13,6 @@ The service method would require decompiling the app (doable, but a bit harder t
 
 This APK will not be put in Google Play.
 
-Code has purposely been put into few classes and I'm not planning on expanding it any further.
+Code has purposely been put into few classes for simplicity and I'm not planning on expanding it any further.
 
-See accompanying blog post for more details.
+(Learn more in my blog post: [Privacy: Programmatically Identifying Developer Devices](http://blog.anonsage.com/2016/03/privacy-programmatically-identifying-dev-device.html))

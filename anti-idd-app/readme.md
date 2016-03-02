@@ -1,5 +1,6 @@
 # AIDD: Anti Identify Dev Device
 
+(Learn more in my blog post: [Privacy: Programmatically Identifying Developer Devices](http://blog.anonsage.com/2016/03/privacy-programmatically-identifying-dev-device.html))
 
 
 
@@ -15,8 +16,7 @@
 - In `AppModel`, add an attribute that has checked to see if the package requests a permission for getting account info
   - Optionally, integrate this into the `AppModelDetailPage` by the other attributes
 
-Code contributions should generally follow [AOSP code style](https://source.android.com/source/code-style.html)
-
+Code contributions should generally follow [AOSP code style](https://source.android.com/source/code-style.html).
 
 
 

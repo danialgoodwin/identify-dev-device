@@ -40,3 +40,7 @@ More info in another readme for this module.
 ## TODOs for further research
 
 - Scan popular apps in store.
+
+
+
+(Learn more in my blog post: [Privacy: Programmatically Identifying Developer Devices](http://blog.anonsage.com/2016/03/privacy-programmatically-identifying-dev-device.html))

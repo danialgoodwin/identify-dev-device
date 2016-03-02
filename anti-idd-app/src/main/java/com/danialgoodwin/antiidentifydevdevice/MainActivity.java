@@ -4,10 +4,13 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.danialgoodwin.android.SimpleMessage;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // No successful way to do this yet
+        menu.add(Menu.NONE, R.id.menu_action_learn_more, Menu.NONE, "Learn more");
 //        menu.add(Menu.NONE, R.id.menu_action_send_fake_broadcast, Menu.NONE, "Send fake broadcast");
 
         return super.onCreateOptionsMenu(menu);
@@ -36,11 +40,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_action_learn_more:
+                showLearnMorePage(this);
+                break;
             case R.id.menu_action_send_fake_broadcast:
 //                sendFakeBroadcast(this);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showLearnMorePage(@NonNull Context context) {
+        SimpleMessage.showPrompt(context, "AIDD", "Coming soon");
     }
 
     // Note: This currently has error: `java.lang.SecurityException: Permission Denial: not allowed to send broadcast android.intent.action.PACKAGE_REPLACED`
