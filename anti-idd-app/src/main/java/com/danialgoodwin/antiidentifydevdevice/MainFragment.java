@@ -104,9 +104,15 @@ public class MainFragment extends Fragment {
         mScanAppsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (mLoadAppListTask == null) {
+                if (mLoadAppListTask == null || mLoadAppListTask.getStatus() == AsyncTask.Status.FINISHED) {
                     mLoadAppListTask = new ScanAppsTask(mPackageUtils, mOnProgressListener, true);
                     mLoadAppListTask.execute();
+                }
+//                else
+//                if (mLoadAppListTask.getStatus() == AsyncTask.Status.RUNNING) {
+//                    // TODOv2: Maybe allow user to pause scan in progress rather than having to
+//                    // start all over from the beginning.
+////                    mLoadAppListTask.cancel(true);
 //                }
             }
         });

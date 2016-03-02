@@ -11,7 +11,8 @@
 - Add parent Activity support for API 15 for `AppModelDetailPage` (hint: just need to edit AndroidManifest.xml)
 - Move hardcoded strings to strings.xml (hint: lint checks or alt+enter)
 - In `AppModelDetailPage`, *emphasize* the "internet" and "running" TextViews when they are true
-- In `MainFragment`, add refresh button to toolbar when list is not empty (there should still be a large button somewhere on the screen if the list is empty)
+- Change action bar to toolbar
+- In `MainFragment`, add refresh button to toolbar (or FAB, which is hidden when not scrolled to top) when list is not empty (there should still be a large button somewhere on the screen if the list is empty)
 - Update `AppModelDetailPage`'s Dialog to something that'll stay shown on rotation (perhaps Fragment or FragmentDialog)
 - In `AppModel`, add an attribute that has checked to see if the package requests a permission for getting account info
   - Optionally, integrate this into the `AppModelDetailPage` by the other attributes
