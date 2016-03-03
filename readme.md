@@ -24,9 +24,9 @@ Notes for why this app might be useful (but still shouldn't be used):
 
 
 
-## Identify Dev Device app
+## IDD: Identify Dev Device app
 
-More info in another readme in the identify-app module's directory.
+More info in another readme in the [identify-app module's directory](https://github.com/danialgoodwin/identify-dev-device/tree/master/idd-app).
 
 
 
@@ -36,7 +36,7 @@ This app identifies apps that have the capability to track app installs, thus de
 
 This is achieved by reading the AndroidManifest file for the apps and looking for a BroadcastReceiver that has the Intent action for watching package changes (add/replace/remove).
 
-More info in another readme in the anti-idd-app module's directory.
+More info in another readme in the [anti-idd-app module's directory](https://github.com/danialgoodwin/identify-dev-device/tree/master/anti-idd-app).
 
 
 
