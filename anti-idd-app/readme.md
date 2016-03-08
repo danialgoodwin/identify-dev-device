@@ -22,6 +22,8 @@ All graphics created by using Android Studio image asset tools.
 
 ## Further Potential Ideas
 
+- Scan dex/smali files for IDD usages
+- Keep track of app version codes/numbers so that they aren't scanned multiple times
 - Possibly add more limitations on which packages are shown:
   - Check for data tag's host and package. [More info](http://developer.android.com/guide/topics/manifest/data-element.html)
 - In-app package detail page:
